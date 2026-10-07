@@ -31,6 +31,18 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Zed ###
+.zed/
+
+### OS & Misc ###
+.DS_Store
+Thumbs.db
+*.log
+
+### Local Documentation & Notes ###
+CONVERSATION_AND_PROJECT_DUMP.txt
+explanation/
 milestones/
 Plan.pdf
-explanation/
+
