@@ -3,6 +3,7 @@ package com.example.ticket_management.service;
 import com.example.ticket_management.dto.TicketCreateRequest;
 import com.example.ticket_management.dto.TicketResponse;
 import com.example.ticket_management.dto.TicketUpdateRequest;
+import com.example.ticket_management.exception.TicketNotFoundException;
 import com.example.ticket_management.model.Ticket;
 import com.example.ticket_management.model.TicketStatus;
 import com.example.ticket_management.repository.TicketRepository;
@@ -29,7 +30,7 @@ public class TicketService {
     @Transactional(readOnly = true)
     public TicketResponse getTicketById(Long id) {
         Ticket ticket = ticketRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ticket not found with id: " + id));
+                .orElseThrow(() -> new TicketNotFoundException(id));
         return TicketResponse.fromEntity(ticket);
     }
 
@@ -49,7 +50,7 @@ public class TicketService {
     @Transactional
     public TicketResponse updateTicket(Long id, TicketUpdateRequest request) {
         Ticket ticket = ticketRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ticket not found with id: " + id));
+                .orElseThrow(() -> new TicketNotFoundException(id));
 
         ticket.setTitle(request.title());
         ticket.setDescription(request.description());
@@ -62,7 +63,7 @@ public class TicketService {
     @Transactional
     public void deleteTicket(Long id) {
         if (!ticketRepository.existsById(id)) {
-            throw new RuntimeException("Ticket not found with id: " + id);
+            throw new TicketNotFoundException(id);
         }
         ticketRepository.deleteById(id);
     }
