@@ -16,3 +16,6 @@ test: db-start
 
 db-repl:
 	psql -U postgres -d ticketdb
+
+run: db-start
+	mvnw.cmd spring-boot:run
