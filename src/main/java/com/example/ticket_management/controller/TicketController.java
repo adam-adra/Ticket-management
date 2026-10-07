@@ -4,6 +4,8 @@ import com.example.ticket_management.dto.TicketCreateRequest;
 import com.example.ticket_management.dto.TicketResponse;
 import com.example.ticket_management.dto.TicketUpdateRequest;
 import com.example.ticket_management.service.TicketService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,23 +19,27 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/tickets")
 @RequiredArgsConstructor
+@Tag(name = "Tickets", description = "Endpoints for managing support and operational tickets")
 public class TicketController {
 
     private final TicketService ticketService;
 
     @GetMapping
+    @Operation(summary = "Get all tickets", description = "Retrieves a list of all existing support tickets")
     public ResponseEntity<List<TicketResponse>> getAllTickets() {
         log.info("Fetching all tickets");
         return ResponseEntity.ok(ticketService.getAllTickets());
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get ticket by ID", description = "Retrieves details of a specific ticket by its database ID")
     public ResponseEntity<TicketResponse> getTicketById(@PathVariable Long id) {
         log.info("Fetching ticket with ID: {}", id);
         return ResponseEntity.ok(ticketService.getTicketById(id));
     }
 
     @PostMapping
+    @Operation(summary = "Create a new ticket", description = "Creates a new support ticket with initial status OPEN")
     public ResponseEntity<TicketResponse> createTicket(@Valid @RequestBody TicketCreateRequest request) {
         log.info("Received request to create ticket: {}", request.title());
         TicketResponse created = ticketService.createTicket(request);
@@ -41,6 +47,7 @@ public class TicketController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Update an existing ticket", description = "Updates title, description, status, or priority of a ticket")
     public ResponseEntity<TicketResponse> updateTicket(
             @PathVariable Long id,
             @Valid @RequestBody TicketUpdateRequest request
@@ -50,6 +57,7 @@ public class TicketController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete a ticket", description = "Permanently deletes a ticket by ID")
     public ResponseEntity<Void> deleteTicket(@PathVariable Long id) {
         log.info("Received request to delete ticket ID: {}", id);
         ticketService.deleteTicket(id);
